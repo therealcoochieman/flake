@@ -106,7 +106,6 @@ in
   networking.interfaces.enp3s0.wakeOnLan.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -126,7 +125,7 @@ in
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.theo = {
+  users.users.hermes = {
     isNormalUser = true;
     description = "theo";
     extraGroups = [ "networkmanager" "wheel" "input" ];
@@ -206,8 +205,6 @@ in
   hardware = {
     opengl = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
     };
     nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta;
@@ -219,7 +216,7 @@ in
   };
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     extraOptions = "experimental-features = nix-command flakes";
     gc = {
       automatic = true;
@@ -228,7 +225,7 @@ in
     };
   };
 
-  home-manager.users.theo =
+  home-manager.users.hermes =
     {
       home.packages = with pkgs; [ htop ];
       home.stateVersion = "23.11";

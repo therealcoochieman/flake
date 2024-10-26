@@ -3,9 +3,10 @@ if not status_ok then
     return
 end
 
-vim.diagnostic.config = {
+vim.diagnostic.config({
     update_in_insert = true,
-}
+})
+
 bufferline.setup({
     options = {
         mode = "tabs",
