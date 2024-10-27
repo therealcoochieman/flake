@@ -4,9 +4,11 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     home-manager = {
-      url = github:nix-community/home-manager;
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvidia-patch.url = "github:icewind1991/nvidia-patch-nixos";
+    nvidia-patch.inputs.nixpkgs.follows = "nixpkgs";
 
     # Official Hyprland Flake
     hyprland = {

@@ -22,6 +22,7 @@ return packer.startup(function(use)
     use("windwp/nvim-autopairs") -- autopair plugin (highly customizable!)
     use("kylechui/nvim-surround") -- cool plugin to surround text
     use("catppuccin/nvim") -- theme
+    use('nyoom-engineering/oxocarbon.nvim') -- theme
     use("Pocco81/auto-save.nvim") --autosave
     use("akinsho/bufferline.nvim") -- cuter tabs
     use("akinsho/toggleterm.nvim") -- toggleterm

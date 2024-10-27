@@ -1,13 +1,18 @@
-local ok, theme = pcall(require, "catppuccin")
+local ok, cat_theme = pcall(require, "catppuccin")
 if not ok then
         vim.notify("Could not load theme")
         return
 end
 
-theme.setup({
+cat_theme.setup({
     no_italic = false, -- Force no italic
     no_bold = false, -- Force no bold
     no_underline = false, -- Force no underline
+    styles = {
+        comments = { "italic" },
+        keywords = { "bold" },
+        functions = { "italic" },
+    },
     term_colors = true, -- sets terminal colors (e.g. `g:terminal_color_0`)
     -- add integrations
     integrations = {
@@ -36,4 +41,4 @@ theme.setup({
     },
 })
 
-vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-macchiato"

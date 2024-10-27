@@ -77,6 +77,9 @@
             animations = import ./animations.nix;
             exec-once = import ./exec-once.nix { inherit pkgs; };
           };
+          extraConfig = ''
+            workspace = 1,monitor:DP-3
+          '';
         };
 
         # hyprpaper setup

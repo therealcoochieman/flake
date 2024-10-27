@@ -7,6 +7,7 @@
 local servers = {
     "clangd",
     "nil_ls",
+    "rust-analyzer",
 }
 
 -- installer.setup({

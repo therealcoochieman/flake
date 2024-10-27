@@ -1,14 +1,9 @@
-# Edit this configuration file to define what should be installed on
+# Edit this configuration file to define what should be installed oncon
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { inputs, config, pkgs, ... }:
 let
-  sunshineOverride = pkgs.sunshine.overrideAttrs (prev: {
-    runtimeDependencies = prev.runtimeDependencies ++ [
-      pkgs.linuxKernel.packages.linux_zen.nvidia_x11
-    ];
-  });
   overlays = [
     (final: prev: {
       sf-mono-liga-bin = prev.stdenvNoCC.mkDerivation rec {
@@ -22,6 +17,7 @@ let
         '';
       };
     })
+    # inputs.nvidia-patch.overlays.default
   ];
 in
 {
@@ -31,12 +27,12 @@ in
       ./hardware-configuration.nix
       ../../services/ssh.nix
       ../../services/sunshine.nix
-      ../../services/wakeonlan.nix
       ../../modules/programs/kitty.nix
       ../../theming/default.nix
       ../../modules/programs/waybar
       ../../modules/terminals/zsh.nix
       ../../modules/editors/nvim.nix
+      ../../modules/programs/steam.nix
     ] ++ (import ../../modules/desktops/hyprland);
 
   # Bootloader.
@@ -53,11 +49,17 @@ in
       efi.canTouchEfiVariables = true;
     };
     kernelModules = [ "uinput" "usbip" ];
+    kernelParams = [
+      "nvidia-drm.modeset=1"
+      "nvidia_modeset.hdmi_deepcolor=1"
+      "nvidia-drm.fbdev=1"
+    ];
+    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
+  networking.interfaces.enp4s0.wakeOnLan.enable = true;
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
@@ -92,8 +94,9 @@ in
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   #services.xserver.displayManager.gdm.wayland = false;
-  #services.xserver.desktopManager.gnome.enable = true;
+  # services.xserver.desktopManager.gnome.enable = true;
   hyprland.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -103,7 +106,6 @@ in
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-  networking.interfaces.enp3s0.wakeOnLan.enable = true;
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
@@ -149,13 +151,17 @@ in
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.nvidia.acceptLicense = true;
+  nixpkgs.config.cudaSupport = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+  environment.sessionVariables = rec {
+    KWIN_DRM_ALLOW_NVIDIA_COLORSPACE = 1;
+  };
+
   environment.systemPackages = with pkgs; [
     vim
     #  wget
-    sunshineOverride
     git
     cmake
     gnumake
@@ -163,10 +169,13 @@ in
     unzip
     zip
     cargo
-    steam-run
+    (sunshine.override {
+      cudaSupport = true;
+      stdenv = pkgs.cudaPackages.backendStdenv;
+    })
     (discord.override {
-        withVencord = true;
-     })
+      withVencord = true;
+    })
     vesktop
     nodejs_20
     python3Full
@@ -205,12 +214,13 @@ in
   hardware = {
     opengl = {
       enable = true;
+      driSupport32Bit = true;
     };
     nvidia = {
-      package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
       modesetting.enable = true;
       powerManagement.enable = false;
-      open = false;
+      open = true;
       nvidiaSettings = true;
     };
   };

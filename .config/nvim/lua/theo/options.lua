@@ -27,6 +27,7 @@ local options = {
     number = true,
     relativenumber = false,
     wrapmargin = 80,
+    textwidth = 80,
     scrolloff = 8,
     smarttab = true,
     backspace = { "eol", "start", "indent" },
