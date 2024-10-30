@@ -2,7 +2,8 @@
   # launch predefined apps
   "$mod, RETURN, exec, $term"
   "$mod, X, exec, firefox"
-  "$mod, SPACE, exec, rofi"
+  "$mod, SPACE, exec, rofi -show drun -font 'Liga SFMono Nerd Font 12'"
+  "$mod , COMMA, exec, rofi -show power-menu 'Liga SFMono Nerd Font 12'"
 
   # window management
   "$mod SHIFT, Q, killactive"

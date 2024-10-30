@@ -22,15 +22,20 @@ in
 {
 
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./apple-silicon-support
       ../../modules/programs/waybar
       ../../modules/programs/kitty.nix
       ../../modules/editors/nvim.nix
       ../../theming/default.nix
+      ../../modules/terminals/zsh.nix
+      ../../modules/programs/rofi.nix
     ] ++ (import ../../modules/desktops/hyprland);
-    nixpkgs.overlays = overlays;
+  nixpkgs.overlays = overlays;
+  nixpkgs.config.allowUnfree = true;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -43,8 +48,8 @@ in
     asahi = {
       peripheralFirmwareDirectory = ./firmware;
       useExperimentalGPUDriver = true;
-#      experimentalGPUInstallMode = "driver";
-#      setupAsahiSound = true;
+      #      experimentalGPUInstallMode = "driver";
+      #      setupAsahiSound = true;
       withRust = true;
     };
     # graphics.enable = true;
@@ -82,9 +87,9 @@ in
   services.xserver.enable = true;
   # services.xserver.desktopManager.gnome.enable = true;
   services.xserver.displayManager = {
-     gdm = {
-       enable = true;
-     };
+    gdm = {
+      enable = true;
+    };
   };
 
   hyprland.enable = true;
@@ -108,31 +113,33 @@ in
   # services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-   users.users.proteus = {
-     isNormalUser = true;
-     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-     packages = with pkgs; [
-       firefox
-       tree
-       kitty
-     ];
-   };
-
-  networking.wireless.iwd = {
-    enable = true;
-    settings.General.EnableNetworkingConfiguration = true;
+  users.users.proteus = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    packages = with pkgs; [
+      firefox
+      tree
+      kitty
+    ];
   };
+
+  # networking.wireless.iwd = {
+  #   enable = true;
+  #   settings.General.EnableNetworkingConfiguration = true;
+  # };
+  networking.networkmanager.enable = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-   environment.systemPackages = with pkgs; [
-     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-     wget
-     mesa
-     mesa.drivers
-     git
-     gcc
-     python3
-   ];
+  environment.systemPackages = with pkgs; [
+    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    wget
+    mesa
+    mesa.drivers
+    git
+    gcc
+    python3
+    vesktop
+  ];
 
   nix = {
     package = pkgs.nixVersions.stable;

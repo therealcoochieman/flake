@@ -14,7 +14,6 @@
     hyprland = {
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
-      # Requires "hyprland.nixosModules.default" to be added the host modules
     };
 
     sf-mono-liga-src = {

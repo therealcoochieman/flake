@@ -33,6 +33,7 @@ in
       ../../modules/terminals/zsh.nix
       ../../modules/editors/nvim.nix
       ../../modules/programs/steam.nix
+      ../../modules/programs/discord.nix
     ] ++ (import ../../modules/desktops/hyprland);
 
   # Bootloader.
@@ -172,9 +173,6 @@ in
     (sunshine.override {
       cudaSupport = true;
       stdenv = pkgs.cudaPackages.backendStdenv;
-    })
-    (discord.override {
-      withVencord = true;
     })
     vesktop
     nodejs_20
