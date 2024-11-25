@@ -34,6 +34,8 @@ in
       ../../modules/editors/nvim.nix
       ../../modules/programs/steam.nix
       ../../modules/programs/discord.nix
+      ../../modules/programs/rofi.nix
+      ../../modules/development/man.nix
     ] ++ (import ../../modules/desktops/hyprland);
 
   # Bootloader.
